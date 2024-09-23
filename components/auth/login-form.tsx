@@ -46,8 +46,7 @@ export const LoginForm = () => {
             login(values)
             .then((data) => {
                 setError(data?.error);
-                //todo add the success
-                // setSuccess(data.success);
+                setSuccess(data?.success);
             })
         });
     };

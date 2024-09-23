@@ -26,14 +26,18 @@ export const {
         }
     },
     callbacks:{
-        // async signIn({user}){
-        //     const existingUser = await getUserById(user.id);
+        async signIn({user,account}){
+            //allow OAuth without email verification
+            if (account?.provider != "credentials") return true;
+            
+            const existingUser = await getUserById(user.id);
 
-        //     if (!existingUser || !existingUser.emailVerified) {
-        //         return false;
-        //     }
-        //     return true;
-        // },
+            //Prevent sign in without email verify
+            if (!existingUser?.emailVerified) 
+                return false;
+
+            return true;
+        },
         async session({token,session}){
             console.log({
                 sessionToken:token,
