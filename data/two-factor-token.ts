@@ -11,9 +11,11 @@ export const getTwoFactorTokenByToken = async (token: string) => {
         return null;
     }
 };
-export const getTwoFactorTokenByEmail = async (email: string) => {
+export const getTwoFactorTokenByEmail = async (
+    email:string
+) => {
     try {
-        const twoFactortoken = await db.twoFactorToken.findUnique({
+        const twoFactortoken = await db.twoFactorToken.findFirst({
             where: {email}
         });
 
