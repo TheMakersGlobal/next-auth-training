@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 
 export const getVerificationTokenByToken = async(
-    token: String
+    token: string
 ) => {
     try {
         const verficationToken = await db.verificationToken.findUnique({
@@ -14,7 +14,7 @@ export const getVerificationTokenByToken = async(
 }
 
 export const getVerificationTokenByEmail = async(
-    email: String
+    email: string
 ) => {
     try {
         const verificationToken = await db.verificationToken.findFirst({
