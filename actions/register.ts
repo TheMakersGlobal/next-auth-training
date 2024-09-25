@@ -1,7 +1,7 @@
 'use server';
 import { RegisterSchema } from '@/schemas';
 import { db } from '@/lib/db';
-import*as z from 'zod';
+import * as z from 'zod';
 import bcryptjs from 'bcryptjs'
 import { getUserByEmail } from '@/data/user';
 import { generateVerificationToken } from '@/lib/tokens';
