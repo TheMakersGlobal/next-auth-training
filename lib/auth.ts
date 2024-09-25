@@ -5,9 +5,11 @@ export const currentUser = async () => {
 
     return session?.user;
 };
-//get user role as server component
-// export const currentRole = async () => {
-//     const session = await auth();
 
-//     return session?.user?.role;
-// };
+//get user role as server component
+
+export const currentRole = async () => {
+    const session = await auth();
+
+    return session?.user?.role;
+};

@@ -24,5 +24,5 @@ export const RoleGate = ({
         <>
         {children}
         </>
-    )
-}
+    );
+};
