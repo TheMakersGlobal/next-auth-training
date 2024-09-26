@@ -4,19 +4,21 @@ import * as z from 'zod';
 import {useForm} from 'react-hook-form';
 import { useTransition, useState } from "react";
 import { SettingsShema } from '@/schemas';
-import { logout } from "@/actions/logout";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { Button } from "@/components/ui/button";
 import { settings } from "@/actions/settings";
 import { useSession } from "next-auth/react";
 import { Form, FormField, FormLabel, FormControl, FormItem, FormDescription, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@radix-ui/react-select';
+import { Switch } from '@/components/ui/switch';
 
 import { Card,
     CardHeader,
     CardContent,
  } from "@/components/ui/card";
 import { zodResolver } from '@hookform/resolvers/zod';
+import { UserRole } from '@prisma/client';
 
 
 const SettingsPage = () => {
@@ -30,6 +32,10 @@ const SettingsPage = () => {
         resolver: zodResolver(SettingsShema),
         defaultValues: {
             name: user?.name || undefined,
+            email: user?.email || undefined,
+            password: undefined,
+            newPassword: undefined,
+            role: user?.role || undefined,
         }
     });
     
@@ -67,6 +73,8 @@ const SettingsPage = () => {
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>
+                                        Name
+                                    </FormLabel>
                                         <FormControl>
                                             <Input
                                             {...field}
@@ -74,11 +82,127 @@ const SettingsPage = () => {
                                             disabled={isPending}
                                             />
                                         </FormControl>
-                                    </FormLabel>
                                 </FormItem>
                             )}
                             >
                             </FormField>
+                            <FormField
+                            control={form.control}
+                            name='email'
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        Email
+                                    </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                            {...field}
+                                            placeholder='jhondoe@gmail.com'
+                                            disabled={isPending}
+                                            />
+                                        </FormControl>
+                                </FormItem>
+                            )}
+                            >
+                            </FormField>
+                            <FormField
+                            control={form.control}
+                            name='password'
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        Password
+                                    </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                            {...field}
+                                            placeholder='******'
+                                            disabled={isPending}
+                                            />
+                                        </FormControl>
+                                </FormItem>
+                            )}
+                            >
+                            </FormField>
+                            <FormField
+                            control={form.control}
+                            name='newPassword'
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        New password
+                                    </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                            {...field}
+                                            placeholder='******'
+                                            disabled={isPending}
+                                            />
+                                        </FormControl>
+                                </FormItem>
+                            )}
+                            >
+                            </FormField>
+                            <FormField
+                            control={form.control}
+                            name='isTwoFactorEnabled'
+                            render={({field}) => (
+                                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm'>
+                                    <div className="space-y-1">
+                                        <FormLabel>
+                                            Two Factor Authentication
+                                        </FormLabel>
+                                            <FormDescription>
+                                                Enable two factor authentication
+                                            </FormDescription>
+                                    </div>
+                                    <FormControl>
+                                        <Switch
+                                        disabled={isPending}
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                            >
+                            </FormField>
+                            {/* hide unnessesory data from OAuth people */}
+                            {user?.isOAuth === false &&(
+                                <>
+                            <FormField 
+                            control={form.control}
+                            name='role'
+                            render={({field}) => (
+                                <FormItem className=''>
+                                    <FormLabel>
+                                        Role
+                                    </FormLabel>
+                                        <Select
+                                        disabled={isPending}
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a role"/> 
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value={UserRole.ADMIN}>
+                                                    Admin
+                                                </SelectItem>
+                                                <SelectItem value={UserRole.USER}>
+                                                    User
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        </FormItem>
+                            )}
+                            >
+                            </FormField>
+                            </>
+                            )}
                             <Button type='submit'>
                                 Save
                             </Button>
